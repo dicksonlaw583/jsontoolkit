@@ -1,10 +1,10 @@
-# JSON Toolkit for GMS 2.x - v0.0.1
+# JSON Toolkit for GMS 2.x
 
 ## Overview
 JSON Toolkit is a set of companion scripts facilitating the use of GML's built in `json_encode()` and `json_decode()` functions. It contains utilities for visually building JSON structure, accessing and manipulating deeply nested values, iterating through a JSON structure, and saving/loading JSON data in files. With JSON Toolkit, many common JSON operations that would otherwise take several lines, intermediate values and repetitions in conventional GML can be shortened into concise, easy-to-read one-liners.
 
 ## Installation Instructions
-Download the GMEZ file from the Releases page. In your project, right-click on Extensions > Import extension, then select the downloaded GMEZ file.
+Install for free at [YoYo Marketplace](http://marketplace.yoyogames.com/assets/8066/json-toolkit).
 
 ## License
 JSON Toolkit is licensed under the MIT License. You may freely use it in personal and commercial projects.
@@ -27,7 +27,7 @@ ds_map_add(global.stats[? "Bob"], "DEF", 2);
 ```
 **With JSON Toolkit**
 ```
-var iap_map = JsonStruct(JsonMap(
+global.stats = JsonStruct(JsonMap(
 	"Alice", JsonMap(
     	"HP", 5,
         "ATK", 5,
