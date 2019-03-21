@@ -125,7 +125,7 @@ for (var i = 0; i < ds_list_size(json_list); i++) {
 ```
 // Show a message for each name
 var json_data = json_decode(json_str);
-for (var i = json_iterate(json_data); json_has_next(json_data); json_next(json_data)) {
+for (var i = json_iterate(json_data, ds_type_list); json_has_next(json_data); json_next(json_data)) {
 	show_message("Hello from " + json_get(i[JSONITER.VALUE], "name") + "!");
 }
 ```
