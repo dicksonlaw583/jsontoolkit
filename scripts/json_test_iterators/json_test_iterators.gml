@@ -5,6 +5,7 @@ var fixture = JsonStruct(JsonMap());
 assert_isnt_defined(json_iterate(-1, ds_type_map), "12.1a: Didn't catch nonsense!");
 assert_isnt_defined(json_iterate(-1, ds_type_list), "12.1b: Didn't catch nonsense!");
 assert_isnt_defined(json_iterate(fixture, ds_type_list), "12.1c: Didn't catch nonsense!");
+json_destroy(fixture);
 
 // 12.2: Top level is map
 var fixture = JsonStruct(JsonMap(
@@ -65,6 +66,16 @@ for (var i = json_iterate(fixture, "baz", ds_type_map); json_has_next(i); json_n
     got += i[JSONITER.KEY]+":"+i[JSONITER.VALUE];
 }
 assert_equal(got, "d:e", "12.2.4.2: Live map scenario failed!");
+got = "";
+for (var i = json_iterate(fixture, ["bar"], ds_type_list); json_has_next(i); json_next(i)) {
+    got += i[JSONITER.VALUE];
+}
+assert_equal(got, "abc", "12.2.4.1 (alt): Live list scenario failed!");
+got = "";
+for (var i = json_iterate(fixture, ["baz"], ds_type_map); json_has_next(i); json_next(i)) {
+    got += i[JSONITER.KEY]+":"+i[JSONITER.VALUE];
+}
+assert_equal(got, "d:e", "12.2.4.2 (alt): Live map scenario failed!");
 
 // 12.3: Top level is list
 json_destroy(fixture);
@@ -133,6 +144,16 @@ for (var i = json_iterate(fixture, 4, ds_type_list); json_has_next(i); json_next
     got += i[JSONITER.VALUE];
 }
 assert_equal(got, "gammadelta", "12.3.4.2: Live scenario failed!");
+got = "";
+for (var i = json_iterate(fixture, [-2], ds_type_map); json_has_next(i); json_next(i)) {
+    got += i[JSONITER.KEY]+":"+i[JSONITER.VALUE];
+}
+assert_equal(got, "alpha:beta", "12.3.4.1 (alt): Live scenario failed!");
+got = "";
+for (var i = json_iterate(fixture, -1, ds_type_list); json_has_next(i); json_next(i)) {
+    got += i[JSONITER.VALUE];
+}
+assert_equal(got, "gammadelta", "12.3.4.2 (alt): Live scenario failed!");
 
 // Cleanup
 json_destroy(fixture);

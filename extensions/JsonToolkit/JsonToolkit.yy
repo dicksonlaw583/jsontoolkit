@@ -21,7 +21,7 @@
     "androidsourcedir": "",
     "author": "",
     "classname": "",
-    "copyToTargets": 105554163798254,
+    "copyToTargets": 144713361056071918,
     "date": "2019-30-22 01:02:27",
     "description": "",
     "extensionName": "",
@@ -326,6 +326,23 @@
                     "kind": 11,
                     "name": "JsonMap",
                     "returnType": 2
+                },
+                {
+                    "id": "c7ccb965-f21c-445c-b47a-0611fa834b97",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 3,
+                    "args": [
+                        2,
+                        2,
+                        2
+                    ],
+                    "externalName": "_json_dig",
+                    "help": "_json_dig(jsonstruct, @path, ignore_last_n)",
+                    "hidden": false,
+                    "kind": 11,
+                    "name": "_json_dig",
+                    "returnType": 2
                 }
             ],
             "init": "",
@@ -368,5 +385,5 @@
     "tvosmaccompilerflags": "",
     "tvosmaclinkerflags": "",
     "tvosplistinject": "",
-    "version": "1.0.0"
+    "version": "1.1.0"
 }

@@ -94,39 +94,23 @@ return tuple;
 if (argument_count == 0) {
     show_error("Expected at least 1 argument, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
-// No need to check further if no path
-if (argument_count == 1) return 1;
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (!ds_map_exists(current, k)) return -1;
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list) || k >= ds_list_size(current)) return -1;
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || !ds_map_exists(current, k)) return -i;
-        current = current[? k];
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || k >= ds_list_size(current)) return -i;
-        current = current[| k];
+// Build the seek path
+var path = array_create(argument_count),
+    pc = 1;
+for (var i = 1; i < argument_count; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[pc++] = argi[j];
+        }
     } else {
-        return -1;
+        path[pc++] = argi;
     }
 }
-// All layers exist, must be valid
-return 1;
+// Return the path validity marker from _json_dig
+_json_dig(argument[0], path, 0);
+return path[0];
 
 #define json_encode_as_list
 /// @description json_encode_as_list(jsonstruct)
@@ -152,39 +136,22 @@ return "";
 if (argument_count == 0) {
     show_error("Expected at least 1 argument, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return undefined;
-// No need to check further if no path
-if (argument_count == 1) return current;
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (!ds_map_exists(current, k)) return undefined;
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return undefined;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list) || k >= ds_list_size(current)) return undefined;
-    current = current[| k];
-} else {
-    return undefined;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || !ds_map_exists(current, k)) return undefined;
-        current = current[? k];
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || k >= ds_list_size(current)) return undefined;
-        current = current[| k];
+// Build the seek path
+var path = array_create(argument_count),
+    pc = 1;
+for (var i = 1; i < argument_count; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[pc++] = argi[j];
+        }
     } else {
-        return undefined;
+        path[pc++] = argi;
     }
 }
-// All layers exist, must be valid
-return current;
+// Return the result of _json_dig
+return _json_dig(argument[0], path, 0);
 
 #define json_set
 /// @description json_set(@jsonstruct, ..., value)
@@ -194,58 +161,54 @@ return current;
 if (argument_count < 3) {
     show_error("Expected at least 3 arguments, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (argument_count == 3) {
-        current[? k] = argument[2];
-        return 1;
-    }
-    if (!ds_map_exists(current, k)) {
-        return -1;
-    }
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list)) return -1;
-    if (argument_count == 3) {
-        current[| k] = argument[2];
-        return 1;
-    }
-    if (k >= ds_list_size(current)) {
-        return -1;
-    }
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count-1; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || (!ds_map_exists(current, k) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[? k];
-        }
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || (k >= ds_list_size(current) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[| k];
+// Build the seek path
+var path = array_create(argument_count-1),
+    pc = 0;
+for (var i = 1; i < argument_count-1; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
         }
     } else {
-        return -1;
+        path[++pc] = argi;
     }
 }
-// Set the last layer and go
-if (is_string(k)) {
-    current[? k] = argument[argument_count-1];
-} else {
-    current[| k] = argument[argument_count-1];
+// Special: Dig at least to default if only path value is real
+var single_real_path = pc == 1 && is_real(path[1]);
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
 }
+// Stop if _json_dig() errors out
+var current = _json_dig(argument[0], path, 1);
+if (path[0] <= 0) {
+    return path[0];
+}
+// Attempt to set the target
+var k = path[pc];
+if (is_string(k) && !_json_not_ds(current, ds_type_map)) {
+    current[? k] = argument[argument_count-1];
+} else if (is_real(k) && !_json_not_ds(current, ds_type_list)) {
+    if (k < 0) {
+        k += ds_list_size(current);
+        if (k < 0) {
+            if (single_real_path) {
+                return -1;
+            }
+            return -pc;
+        }
+    }
+    current[| k] = argument[argument_count-1];
+} else {
+    if (single_real_path) {
+        return -1;
+    }
+    return -pc;
+}
+// Success!
 return 1;
 
 #define json_set_nested
@@ -256,73 +219,53 @@ return 1;
 if (argument_count < 3) {
     show_error("Expected at least 3 arguments, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
+// Build the seek path
+var path = array_create(argument_count-1),
+    pc = 0;
+for (var i = 1; i < argument_count-1; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
+        }
+    } else {
+        path[++pc] = argi;
+    }
+}
+// Special: Dig at least to default if only path value is real
+var single_real_path = pc == 1 && is_real(path[1]);
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
+}
+// Stop if _json_dig() errors out
+var current = _json_dig(argument[0], path, 1);
+if (path[0] <= 0) {
+    return path[0];
+}
 // Check type of subdata
 var to_nest = argument[argument_count-1],
     nested_is_list = ds_map_size(to_nest) == 1 && ds_map_exists(to_nest, "default");
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (argument_count == 3) {
-        if (nested_is_list) {
-            ds_map_add_list(current, k, to_nest[? "default"]);
-        } else {
-            ds_map_add_map(current, k, to_nest);
-        }
-        return 1;
-    }
-    if (!ds_map_exists(current, k)) {
-        return -1;
-    }
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list)) return -1;
-    if (argument_count == 3) {
-        if (nested_is_list) {
-            current[| k] = to_nest[? "default"];
-            ds_list_mark_as_list(current, k);
-        } else {
-            current[| k] = to_nest;
-            ds_list_mark_as_map(current, k);
-        }
-        return 1;
-    }
-    if (k >= ds_list_size(current)) {
-        return -1;
-    }
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count-1; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || (!ds_map_exists(current, k) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[? k];
-        }
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || (k >= ds_list_size(current) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[| k];
-        }
-    } else {
-        return -1;
-    }
-}
 // Set the last layer and go
-if (is_string(k)) {
+var k = path[pc];
+if (is_string(k) && !_json_not_ds(current, ds_type_map)) {
     if (nested_is_list) {
         ds_map_add_list(current, k, to_nest[? "default"]);
     } else {
         ds_map_add_map(current, k, to_nest);
     }
-} else {
+} else if (is_real(k) && !_json_not_ds(current, ds_type_list)) {
+    if (k < 0) {
+        k += ds_list_size(current);
+        if (k < 0) {
+            if (single_real_path) {
+                return -1;
+            }
+            return -pc;
+        }
+    }
     if (nested_is_list) {
         current[| k] = to_nest[? "default"];
         ds_list_mark_as_list(current, k);
@@ -330,7 +273,13 @@ if (is_string(k)) {
         current[| k] = to_nest;
         ds_list_mark_as_map(current, k);
     }
+} else {
+    if (single_real_path) {
+        return -1;
+    }
+    return -pc;
 }
+// Success!
 return 1;
 
 #define json_insert
@@ -341,67 +290,60 @@ return 1;
 if (argument_count < 3) {
     show_error("Expected at least 3 arguments, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (argument_count == 3) {
-        current[? k] = argument[2];
-        return 1;
-    }
-    if (!ds_map_exists(current, k)) {
-        return -1;
-    }
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list)) return -1;
-    if (argument_count == 3) {
-        ds_list_insert(current, k, argument[2]);
-        return 1;
-    }
-    if (k >= ds_list_size(current)) {
-        return -1;
-    }
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count-1; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || (!ds_map_exists(current, k) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[? k];
-        }
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || (k >= ds_list_size(current) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[| k];
+// Build the seek path
+var path = array_create(argument_count-1),
+    pc = 0;
+for (var i = 1; i < argument_count-1; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
         }
     } else {
-        return -1;
+        path[++pc] = argi;
     }
 }
-// Set the last layer and go
-if (is_string(k)) {
-    if (_json_not_ds(current, ds_type_map)) return -argument_count+2;
+// Special: Dig at least to default if only path value is real
+var single_real_path = pc == 1 && (is_real(path[1]) || is_undefined(path[1]));
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
+}
+// Stop if _json_dig() errors out
+var current = _json_dig(argument[0], path, 1);
+if (path[0] <= 0) {
+    return path[0];
+}
+// Insert at the last layer and go
+var k = path[pc];
+if (is_string(k) && !_json_not_ds(current, ds_type_map)) {
     current[? k] = argument[argument_count-1];
-} else {
-    if (_json_not_ds(current, ds_type_list)) return -argument_count+2;
+    return 1;
+} else if (!_json_not_ds(current, ds_type_list)) {
     if (is_real(k)) {
+        if (k < 0) {
+            k += ds_list_size(current);
+            if (k < 0) {
+                if (single_real_path) {
+                    return -1;
+                }
+                return -pc;
+            }
+        }
         ds_list_insert(current, k, argument[argument_count-1]);
+        return 1;
     } else if (is_undefined(k)) {
         ds_list_add(current, argument[argument_count-1]);
-    } else {
-        return -argument_count+2;
+        return 1;
     }
 }
-return 1;
+// None of the inserts work
+if (single_real_path) {
+    return -1;
+}
+return -pc;
 
 #define json_insert_nested
 /// @description json_insert_nested(@jsonstruct, ..., jsonsubdata)
@@ -412,91 +354,59 @@ if (argument_count < 3) {
     show_error("Expected at least 3 arguments, got " + string(argument_count) + ".", true);
 }
 var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
+// Build the seek path
+var path = array_create(argument_count-1),
+    pc = 0;
+for (var i = 1; i < argument_count-1; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
+        }
+    } else {
+        path[++pc] = argi;
+    }
+}
+// Special: Dig at least to default if only path value is real or undefined
+var single_real_path = pc == 1 && (is_real(path[1]) || is_undefined(path[1]));
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
+}
+// Stop if _json_dig() errors out
+var current = _json_dig(argument[0], path, 1);
+if (path[0] <= 0) {
+    return path[0];
+}
 // Check type of subdata
 var to_nest = argument[argument_count-1],
     nested_is_list = ds_map_size(to_nest) == 1 && ds_map_exists(to_nest, "default");
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (argument_count == 3) {
-        if (nested_is_list) {
-            ds_map_add_list(current, k, to_nest[? "default"]);
-        } else {
-            ds_map_add_map(current, k, to_nest);
-        }
-        return 1;
-    }
-    if (!ds_map_exists(current, k)) {
-        return -1;
-    }
-    current = current[? k];
-} else if (is_real(k) || is_undefined(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list)) return -1;
-    if (argument_count == 3) {
-        if (is_undefined(k)) {
-            k = ds_list_size(current);
-            if (nested_is_list) {
-                ds_list_add(current, ds_map_find_value(argument[2], "default"));
-            } else {
-                ds_list_add(current, argument[2]);
-            }
-        } else {
-            if (nested_is_list) {
-                ds_list_insert(current, k, ds_map_find_value(argument[2], "default"));
-            } else {
-                ds_list_insert(current, k, argument[2]);
-            }
-        }
-        if (nested_is_list) {
-            ds_list_mark_as_list(current, k);
-        } else {
-            ds_list_mark_as_map(current, k);
-        }
-        return 1;
-    }
-    if (k >= ds_list_size(current)) {
-        return -1;
-    }
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count-1; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || (!ds_map_exists(current, k) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[? k];
-        }
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || (k >= ds_list_size(current) && i < argument_count-2)) return -i;
-        if (i < argument_count-2) {
-            current = current[| k];
-        }
-    } else {
-        return -1;
-    }
-}
 // Set the last layer and go
-if (is_string(k)) {
-    if (_json_not_ds(current, ds_type_map)) return -argument_count+2;
+var k = path[pc];
+if (is_string(k) && !_json_not_ds(current, ds_type_map)) {
     if (nested_is_list) {
         ds_map_add_list(current, k, to_nest[? "default"]);
     } else {
         ds_map_add_map(current, k, to_nest);
     }
-} else {
-    if (_json_not_ds(current, ds_type_list)) return -argument_count+2;
+    return 1;
+} else if (!_json_not_ds(current, ds_type_list)) {
     if (is_real(k)) {
+        if (k < 0) {
+            k += ds_list_size(current);
+            if (k < 0) {
+                if (single_real_path) {
+                    return -1;
+                }
+                return -pc;
+            }
+        }
         if (nested_is_list) {
-            ds_list_insert(current, k, ds_map_find_value(argument[argument_count-1], "default"));
+            ds_list_insert(current, k, ds_map_find_value(to_nest, "default"));
         } else {
-            ds_list_insert(current, k, argument[argument_count-1]);
+            ds_list_insert(current, k, to_nest);
         }
     } else if (is_undefined(k)) {
         k = ds_list_size(current);
@@ -506,15 +416,23 @@ if (is_string(k)) {
             ds_list_add(current, argument[argument_count-1]);
         }
     } else {
-        return -argument_count+2;
+        if (single_real_path) {
+            return -1;
+        }
+        return -pc;
     }
     if (nested_is_list) {
         ds_list_mark_as_list(current, k);
     } else {
         ds_list_mark_as_map(current, k);
     }
+    return 1;
 }
-return 1;
+// None of the inserts work
+if (single_real_path) {
+    return -1;
+}
+return -pc;
 
 #define json_unset
 /// @description json_unset(@jsonstruct, ...)
@@ -523,59 +441,55 @@ return 1;
 if (argument_count < 2) {
     show_error("Expected at least 2 arguments, got " + string(argument_count) + ".", true);
 }
-var current = argument[0];
-// Check existence of root
-if (_json_not_ds(current, ds_type_map)) return 0;
-// Check existence of first layer
-var k = argument[1];
-if (is_string(k)) {
-    if (!ds_map_exists(current, k)) {
-        return -1;
+// Build the seek path
+var path = array_create(argument_count),
+    pc = 0;
+for (var i = 1; i < argument_count; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
+        }
+    } else {
+        path[++pc] = argi;
     }
-    if (argument_count == 2) {
+}
+// Special: Dig at least to default if only path value is real
+var single_real_path = pc == 1 && is_real(path[1]);
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
+}
+// Stop if _json_dig() errors out
+var current = _json_dig(argument[0], path, 1);
+if (path[0] <= 0) {
+    return path[0];
+}
+// Set the last layer and go
+var k = path[pc];
+if (is_string(k) && !_json_not_ds(current, ds_type_map)) {
+    if (ds_map_exists(current, k)) {
         ds_map_delete(current, k);
         return 1;
     }
-    current = current[? k];
-} else if (is_real(k)) {
-    if (!ds_map_exists(current, "default")) return -1;
-    current = current[? "default"];
-    if (_json_not_ds(current, ds_type_list)) return -1;
-    if (k >= ds_list_size(current)) {
-        return -1;
-    }
-    if (argument_count == 2) {
+} else if (is_real(k) && !_json_not_ds(current, ds_type_list)) {
+    var current_list_size = ds_list_size(current);
+    if (k >= 0 && k < current_list_size) {
         ds_list_delete(current, k);
         return 1;
     }
-    current = current[| k];
-} else {
-    return -1;
-}
-// Check existence of subsequent layers
-for (var i = 2; i < argument_count; i++) {
-    k = argument[i];
-    if (is_string(k)) {
-        if (_json_not_ds(current, ds_type_map) || !ds_map_exists(current, k)) return -i;
-        if (i < argument_count-1) {
-            current = current[? k];
-        }
-    } else if (is_real(k)) {
-        if (_json_not_ds(current, ds_type_list) || k >= ds_list_size(current)) return -i;
-        if (i < argument_count-1) {
-            current = current[| k];
-        }
-    } else {
-        return -1;
+    if (k < 0 && k >= -current_list_size) {
+        ds_list_delete(current, k+current_list_size);
+        return 1;
     }
 }
-// Set the last layer and go
-if (is_string(k)) {
-    ds_map_delete(current, k);
-} else {
-    ds_list_delete(current, k);
+// Unset attempt failed
+if (single_real_path) {
+    return -1;
 }
-return 1;
+return -pc;
 
 #define json_clone
 /// @description json_clone(jsonstruct)
@@ -627,35 +541,37 @@ enum JSONITER {
     KEY,
     DS
 }
-var ds = argument[0],
-    iterator = array_create(3);
-if (_json_not_ds(ds, ds_type_map)) return undefined;
-if (argument_count > 2) {
-    var k = argument[1];
-    if (is_string(k)) {
-        if (!ds_map_exists(ds, k)) return undefined;
-        ds = ds[? k];
-    } else if (is_real(k)) {
-        if (!ds_map_exists(ds, "default")) return undefined;
-        ds = ds[? "default"];
-        if (_json_not_ds(ds, ds_type_list)) return undefined;
-        ds = ds[| k];
-    } else {
-        return undefined;
-    }
-    for (var i = 2; i < argument_count-1; i++) {
-        var k = argument[i]
-        if (is_string(k)) {
-            if (!ds_map_exists(ds, k)) return undefined;
-            ds = ds[? k];
-        } else if (is_real(k)) {
-            if (_json_not_ds(ds, ds_type_list)) return undefined;
-            ds = ds[| k];
-        } else {
-            return undefined;
+// Build the seek path
+var path = array_create(argument_count-1),
+    pc = 0;
+for (var i = 1; i < argument_count-1; i++) {
+    var argi = argument[i];
+    if (is_array(argi)) {
+        var jsize = array_length_1d(argi);
+        for (var j = 0; j < jsize; j++) {
+            path[++pc] = argi[j];
         }
+    } else {
+        path[++pc] = argi;
     }
-    iterator[JSONITER.DS] = ds;
+}
+// Special: Dig at least to default if only path value is real
+var single_real_path = pc == 1 && is_real(path[1]);
+if (single_real_path) {
+    path[2] = path[1];
+    path[1] = "default";
+    pc = 2;
+}
+// Stop if _json_dig() errors out
+var ds = _json_dig(argument[0], path, 0);
+if (path[0] <= 0) {
+    return undefined;
+}
+// Create the iterator
+var iterator = array_create(3);
+iterator[JSONITER.DS] = ds;
+if (_json_not_ds(ds, ds_type_map)) return undefined;
+if (pc > 1) {
     switch (argument[argument_count-1]) {
         case ds_type_map:
             if (ds_map_empty(ds)) {
@@ -679,7 +595,7 @@ if (argument_count > 2) {
             show_error("Invalid iteration type.", true);
     }
 } else {
-    switch (argument[1]) {
+    switch (argument[argument_count-1]) {
         case ds_type_map:
             iterator[JSONITER.DS] = ds;
             if (ds_map_empty(ds)) {
@@ -744,3 +660,86 @@ if (is_real(k)) {
 gml_pragma("forceinline");
 return !(is_real(argument0) && ds_exists(argument0, argument1));
 
+#define _json_dig
+/// @description _json_dig(jsonstruct, @seekpath, ignore_last_n)
+/// @param jsonstruct
+/// @param  @seekpath
+/// @param  ignore_last_n
+//seekpath is always [blank, ...<path>...]; first slot will receive a status from this function
+var current = argument0,
+    path = argument1,
+    ignore_last = argument2,
+    spsiz = array_length_1d(path)-ignore_last;
+// Check existence of top
+if (_json_not_ds(current, ds_type_map)) {
+    path[@ 0] = 0;
+    return undefined;
+}
+// If path is "empty", return the top
+if (spsiz <= 1) {
+  path[@ 0] = 1;
+  return current;
+}
+// Check existence of first layer
+var k = path[1];
+if (is_string(k)) {
+    if (!ds_map_exists(current, k)) {
+        path[@ 0] = -1;
+        return undefined;
+    }
+    current = current[? k];
+} else if (is_real(k)) {
+    if (!ds_map_exists(current, "default")) {
+        path[@ 0] = -1;
+        return undefined;
+    }
+    current = current[? "default"];
+    if (_json_not_ds(current, ds_type_list)) {
+        path[@ 0] = -1;
+        return undefined;
+    }
+    var current_list_size = ds_list_size(current);
+    if (k >= current_list_size || k < -current_list_size) {
+        path[@ 0] = -1;
+        return undefined;
+    }
+    if (k < 0) {
+      k += current_list_size;
+    }
+    current = current[| k];
+} else {
+    path[@ 0] = -1;
+    return undefined;
+}
+// Check existence of subsequent layers
+for (var i = 2; i < spsiz; i++) {
+    k = path[i];
+    if (is_string(k)) {
+        if (_json_not_ds(current, ds_type_map) || !ds_map_exists(current, k)) {
+           path[@ 0] = -i;
+           return undefined;
+        }
+        current = current[? k];
+    } else if (is_real(k)) {
+        if (_json_not_ds(current, ds_type_list)) {
+           path[@ 0] = -i;
+           return undefined;
+        }
+        var current_list_size = ds_list_size(current);
+        if (k >= current_list_size || k < -current_list_size) {
+           path[@ 0] = -i;
+           return undefined;
+        }
+        if (k < 0) {
+            k += current_list_size;
+        }
+        current = current[| k];
+    } else {
+        path[@ 0] = -i;
+        return undefined;
+    }
+}
+// Mark the path as OK
+path[@ 0] = 1;
+// Return dig result
+return current;
