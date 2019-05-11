@@ -1,5 +1,5 @@
 {
-    "id": "0c0c3d0d-c635-49bb-ba6c-a5a47188981e",
+    "id": "77f862ff-e867-417a-b9e8-8743e21f5728",
     "modelName": "GMScript",
     "mvc": "1.0",
     "name": "__GMA_BREAKPOINT__",
