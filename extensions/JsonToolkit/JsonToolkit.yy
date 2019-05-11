@@ -11,7 +11,7 @@
         "Scripts\\JsonToolkitExtras\\List"
     ],
     "androidPermissions": [
-        
+
     ],
     "androidProps": true,
     "androidactivityinject": "",
@@ -31,10 +31,10 @@
             "modelName": "GMExtensionFile",
             "mvc": "1.0",
             "ProxyFiles": [
-                
+
             ],
             "constants": [
-                
+
             ],
             "copyToTargets": 9223372036854775807,
             "filename": "JsonToolkit.gml",
@@ -46,7 +46,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_exists",
                     "help": "json_exists(jsonstruct, ...)",
@@ -61,7 +61,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_get",
                     "help": "json_get(jsonstruct, ...)",
@@ -107,7 +107,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_set",
                     "help": "json_set(@jsonstruct, ...)",
@@ -122,7 +122,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_unset",
                     "help": "json_unset(@jsonstruct, ...)",
@@ -152,7 +152,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_insert",
                     "help": "json_insert(@jsonstruct, ..., value)",
@@ -182,7 +182,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_iterate",
                     "help": "json_iterate(jsonstruct, ..., type)",
@@ -258,7 +258,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_set_nested",
                     "help": "json_set_nested(@jsonstruct, ..., subjsonstruct)",
@@ -273,7 +273,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "json_insert_nested",
                     "help": "json_insert_nested(@jsonstruct, ..., subjsonstruct)",
@@ -303,7 +303,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "JsonList",
                     "help": "JsonList(...)",
@@ -318,7 +318,7 @@
                     "mvc": "1.0",
                     "argCount": -1,
                     "args": [
-                        
+
                     ],
                     "externalName": "JsonMap",
                     "help": "JsonMap(...)",
@@ -326,12 +326,29 @@
                     "kind": 11,
                     "name": "JsonMap",
                     "returnType": 2
+                },
+                {
+                    "id": "c7ccb965-f21c-445c-b47a-0611fa834b97",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 3,
+                    "args": [
+                        2,
+                        2,
+                        2
+                    ],
+                    "externalName": "_json_dig",
+                    "help": "_json_dig(jsonstruct, @path, ignore_last_n)",
+                    "hidden": false,
+                    "kind": 11,
+                    "name": "_json_dig",
+                    "returnType": 2
                 }
             ],
             "init": "",
             "kind": 2,
             "order": [
-                
+
             ],
             "origname": "extensions\\JsonToolkit.gml",
             "uncompress": false
@@ -342,10 +359,10 @@
     "installdir": "",
     "iosProps": true,
     "iosSystemFrameworkEntries": [
-        
+
     ],
     "iosThirdPartyFrameworkEntries": [
-        
+
     ],
     "iosdelegatename": "",
     "iosplistinject": "",
@@ -358,10 +375,10 @@
     "sourcedir": "",
     "tvosProps": false,
     "tvosSystemFrameworkEntries": [
-        
+
     ],
     "tvosThirdPartyFrameworkEntries": [
-        
+
     ],
     "tvosclassname": "",
     "tvosdelegatename": "",
