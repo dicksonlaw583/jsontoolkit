@@ -1,7 +1,7 @@
 {
     "id": "aaf5f629-a98e-4c47-b1fb-58101ab451b0",
     "modelName": "GMExtension",
-    "mvc": "1.0",
+    "mvc": "1.2",
     "name": "JsonToolkit",
     "IncludedResources": [
         "Scripts\\JsonToolkitExtras\\JsonStruct",
@@ -24,6 +24,7 @@
     "copyToTargets": 144713361056071918,
     "date": "2019-30-22 01:02:27",
     "description": "",
+    "exportToGame": true,
     "extensionName": "",
     "files": [
         {
@@ -370,9 +371,12 @@
     "maccompilerflags": "",
     "maclinkerflags": "",
     "macsourcedir": "",
+    "options": null,
+    "optionsFile": "options.json",
     "packageID": "",
     "productID": "",
     "sourcedir": "",
+    "supportedTargets": 144713361056071918,
     "tvosProps": false,
     "tvosSystemFrameworkEntries": [
         
