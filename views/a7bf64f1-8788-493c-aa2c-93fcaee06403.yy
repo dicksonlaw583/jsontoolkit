@@ -17,7 +17,8 @@
         "90b44329-6eb7-4c3d-a1c7-997c70ce2d2c",
         "980bb10c-46da-451f-bcd6-19ab2d5cd1a6",
         "667aea57-295c-43c2-89f2-89daf0dda14f",
-        "c9082d27-044f-45e1-9f45-caf2731a5055"
+        "c9082d27-044f-45e1-9f45-caf2731a5055",
+        "17817a4b-5d39-48a9-9adc-2e11a0c06396"
     ],
     "filterType": "GMScript",
     "folderName": "JsonToolkitTests",

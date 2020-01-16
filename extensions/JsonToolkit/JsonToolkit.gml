@@ -743,3 +743,91 @@ for (var i = 2; i < spsiz; i++) {
 path[@ 0] = 1;
 // Return dig result
 return current;
+
+#define _json_rc4
+///@func _json_rc4(@buffer, key, offset, length)
+///@param buffer
+///@param key
+///@param offset
+///@param length
+
+var i, j, s, temp, keyLength, pos;
+s = array_create(256);
+keyLength = string_byte_length(argument1);
+for (var i = 255; i >= 0; --i) {
+	s[i] = i;
+}
+j = 0;
+for (var i = 0; i <= 255; ++i) {
+	j = (j + s[i] + string_byte_at(argument1, i mod keyLength)) mod 256;
+	temp = s[i];
+	s[i] = s[j];
+	s[j] = temp;
+}
+i = 0;
+j = 0;
+pos = 0;
+buffer_seek(argument0, buffer_seek_start, argument2);
+repeat (argument3) {
+	i = (i+1) mod 256;
+	j = (j+s[i]) mod 256;
+	temp = s[i];
+	s[i] = s[j];
+	s[j] = temp;
+	var currentByte = buffer_peek(argument0, pos++, buffer_u8);
+	buffer_write(argument0, buffer_u8, s[(s[i]+s[j]) mod 256] ^ currentByte);
+}
+return argument0;
+
+#define _json_rc4_decrypt_string
+///@func _json_rc4_decrypt_string(str, key)
+///@param str
+///@param key
+var buffer = buffer_base64_decode(argument0);
+_json_rc4(buffer, argument1, 0, buffer_get_size(buffer));
+buffer_seek(buffer, buffer_seek_start, 0);
+var decoded = buffer_read(buffer, buffer_string);
+buffer_delete(buffer);
+return decoded;
+
+#define _json_rc4_encrypt_string
+///@func _json_rc4_encrypt_string(str, key)
+///@param str
+///@param key
+var length = string_byte_length(argument0);
+var buffer = buffer_create(length+1, buffer_fixed, 1);
+buffer_write(buffer, buffer_string, argument0);
+_json_rc4(buffer, argument1, 0, buffer_tell(buffer));
+var encoded = buffer_base64_encode(buffer, 0, length);
+buffer_delete(buffer);
+return encoded;
+
+#define json_encrypt
+///@func json_encrypt(jsonstruct, key)
+///@param jsonstruct
+///@param key
+return _json_rc4_encrypt_string(json_encode(argument0), argument1);
+
+#define json_decrypt
+///@func json_decrypt(jsonstr, key)
+///@param jsonstruct
+///@param key
+return json_decode(_json_rc4_decrypt_string(argument0, argument1));
+
+#define json_save_encrypted
+///@func json_save_encrypted(fname, jsonstruct, key)
+///@param fname
+///@param jsonstruct
+///@param key
+var f = file_text_open_write(argument0);
+file_text_write_string(f, json_encrypt(argument1, argument2));
+file_text_close(f);
+
+#define json_load_encrypted
+///@func json_load_encrypted(fname, key)
+///@param fname
+///@param key
+var f = file_text_open_read(argument0);
+var ciphertext = file_text_read_string(f);
+file_text_close(f);
+return json_decrypt(ciphertext, argument1);

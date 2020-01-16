@@ -344,12 +344,153 @@
                     "kind": 11,
                     "name": "_json_dig",
                     "returnType": 2
+                },
+                {
+                    "id": "608e19ca-eefe-4555-b4c4-44f1f022dac7",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        2,
+                        1,
+                        2,
+                        2
+                    ],
+                    "externalName": "_json_rc4",
+                    "help": "_json_rc4(@buffer, key, offset, length)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "_json_rc4",
+                    "returnType": 1
+                },
+                {
+                    "id": "45c67134-d743-4095-914e-362f2cf805bc",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        1,
+                        1
+                    ],
+                    "externalName": "_json_rc4_decrypt_string",
+                    "help": "_json_rc4_decrypt_string(str, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "_json_rc4_decrypt_string",
+                    "returnType": 1
+                },
+                {
+                    "id": "56c71cbe-5999-44ee-ab0e-3fb91c203db5",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        1,
+                        1
+                    ],
+                    "externalName": "_json_rc4_encrypt_string",
+                    "help": "_json_rc4_encrypt_string(str, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "_json_rc4_encrypt_string",
+                    "returnType": 1
+                },
+                {
+                    "id": "dab56006-befc-4012-98df-bd1f109d8650",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        2,
+                        1
+                    ],
+                    "externalName": "json_encrypt",
+                    "help": "json_encrypt(jsonstruct, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "json_encrypt",
+                    "returnType": 1
+                },
+                {
+                    "id": "62d45207-e521-4780-b41e-fd4c440f76a3",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        1,
+                        1
+                    ],
+                    "externalName": "json_decrypt",
+                    "help": "json_decrypt(jsonstr, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "json_decrypt",
+                    "returnType": 2
+                },
+                {
+                    "id": "9d3cb199-9cbe-4712-a354-4432c546b55f",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        1,
+                        2,
+                        1
+                    ],
+                    "externalName": "json_save_encrypted",
+                    "help": "json_save_encrypted(fname, jsonstruct, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "json_save_encrypted",
+                    "returnType": 2
+                },
+                {
+                    "id": "8cbd252b-9a75-4376-b07b-d8f83bdfd4c3",
+                    "modelName": "GMExtensionFunction",
+                    "mvc": "1.0",
+                    "argCount": 0,
+                    "args": [
+                        1,
+                        1
+                    ],
+                    "externalName": "json_load_encrypted",
+                    "help": "json_load_encrypted(fname, key)",
+                    "hidden": false,
+                    "kind": 2,
+                    "name": "json_load_encrypted",
+                    "returnType": 2
                 }
             ],
             "init": "",
             "kind": 2,
             "order": [
-                
+                "2aeb78ad-c62f-49d1-9267-7a1e5ab64543",
+                "b43ac7f9-7a40-44f3-94b7-08a3307d5a72",
+                "15b4b1f7-307f-4a0b-9919-cb4d445f8cca",
+                "aebdad13-d65d-4723-a7f4-7bebe8bf6328",
+                "f76ec5e1-520a-444e-b466-0387c262e791",
+                "9cedb3c1-d82f-4f6f-9224-d1fcfdf01a25",
+                "6f37994a-fa5b-40bd-a974-c235c94b22f8",
+                "f5d67c9f-852a-48ad-8bf2-0fdb032b4b44",
+                "69b39e58-05ce-4297-bcaa-931e5a80ffd7",
+                "d755bd68-0de4-4baf-a4eb-c602aca4eccc",
+                "4dbbe373-e32e-4557-887b-98476c870ce9",
+                "49e76fe8-4ae6-4bc2-bfa2-af4771ad1c45",
+                "44bc1e69-5643-4375-9dcf-78b6cc1645cb",
+                "d02a7653-d1dc-401c-b395-eafb5661dacb",
+                "5670c332-6b85-4923-941d-44055478cce5",
+                "f1909410-c0a8-4ec2-8045-5fcda76eff7e",
+                "1e14fbf3-1624-4f87-801d-fc3fba4d6ac4",
+                "ce3431eb-8514-4f71-a0e7-d5be28177623",
+                "7ae2add5-2c43-4178-8486-e2414ff94657",
+                "c7ccb965-f21c-445c-b47a-0611fa834b97",
+                "608e19ca-eefe-4555-b4c4-44f1f022dac7",
+                "45c67134-d743-4095-914e-362f2cf805bc",
+                "56c71cbe-5999-44ee-ab0e-3fb91c203db5",
+                "dab56006-befc-4012-98df-bd1f109d8650",
+                "62d45207-e521-4780-b41e-fd4c440f76a3",
+                "9d3cb199-9cbe-4712-a354-4432c546b55f",
+                "8cbd252b-9a75-4376-b07b-d8f83bdfd4c3"
             ],
             "origname": "extensions\\JsonToolkit.gml",
             "uncompress": false

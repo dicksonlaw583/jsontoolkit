@@ -16,6 +16,7 @@ json_test_clone();
 json_test_destroy();
 json_test_iterators();
 json_test_load_save();
+json_test_load_save_encrypted();
 
 // Done
 var time_message = "JSON Toolkit tests completed in " + string(current_time-time_start) + "ms.";
