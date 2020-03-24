@@ -21,7 +21,7 @@
     "androidsourcedir": "",
     "author": "",
     "classname": "",
-    "copyToTargets": 144713361056071918,
+    "copyToTargets": 153720560310812910,
     "date": "2019-30-22 01:02:27",
     "description": "",
     "exportToGame": true,
@@ -518,7 +518,7 @@
     "productID": "",
     "sourcedir": "",
     "supportedTargets": 144713361056071918,
-    "tvosProps": false,
+    "tvosProps": true,
     "tvosSystemFrameworkEntries": [
         
     ],
