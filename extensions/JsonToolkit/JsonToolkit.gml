@@ -809,8 +809,8 @@ return encoded;
 return _json_rc4_encrypt_string(json_encode(argument0), argument1);
 
 #define json_decrypt
-///@func json_decrypt(jsonstr, key)
-///@param jsonstruct
+///@func json_decrypt(jsonencstr, key)
+///@param jsonencstr
 ///@param key
 return json_decode(_json_rc4_decrypt_string(argument0, argument1));
 

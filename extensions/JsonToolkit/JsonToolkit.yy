@@ -421,7 +421,7 @@
                         1
                     ],
                     "externalName": "json_decrypt",
-                    "help": "json_decrypt(jsonstr, key)",
+                    "help": "json_decrypt(jsonencstr, key)",
                     "hidden": false,
                     "kind": 2,
                     "name": "json_decrypt",
