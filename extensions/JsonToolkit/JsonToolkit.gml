@@ -571,7 +571,7 @@ if (path[0] <= 0) {
 var iterator = array_create(3);
 iterator[JSONITER.DS] = ds;
 if (_json_not_ds(ds, ds_type_map)) return undefined;
-if (pc > 1) {
+if (pc >= 1) {
     switch (argument[argument_count-1]) {
         case ds_type_map:
             if (ds_map_empty(ds)) {
