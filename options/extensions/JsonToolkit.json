@@ -1,0 +1,9 @@
+{
+  "extensionId": {
+    "name": "JsonToolkit",
+    "path": "extensions/JsonToolkit/JsonToolkit.yy"
+  },
+  "resourceVersion": "1.0",
+  "resourceType": "GMExtensionConfigSet",
+  "configurables": null
+}
