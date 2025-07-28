@@ -63,7 +63,7 @@ global.stats = JsonStruct(JsonMap(
     	"name": "Bob",
         "HP": 7,
         "ATK": 6,
-        "DEF", 2
+        "DEF": 2
     }
 ]
 ```
