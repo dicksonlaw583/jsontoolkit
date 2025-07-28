@@ -24,7 +24,7 @@ function json_test_extras() {
 	assert_equal(row[| 1], 9, "2.2.5: JSON list has wrong content 1!");
 	assert_equal(row[| 2], undefined, "2.2.6: JSON list has wrong content 2!");
 	assert_equal(row[| 3], "waahoo", "2.2.7: JSON list has wrong content 3!");
-	ds_list_destroy(got);
+	ds_map_destroy(got);
 
 	// 2.3 Nested mashup
 	got = JsonStruct(JsonMap(
