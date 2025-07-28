@@ -1,5 +1,6 @@
 /// @description json_test_unset()
 function json_test_unset() {
+    ///Feather disable GM2023
 
 	// 9.1: Non-existent top layer
 	assert_equal(json_unset(-1, "a", "A"), 0, "9.1a: Failed to handle nonsense!");

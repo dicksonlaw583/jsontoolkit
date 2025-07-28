@@ -1,6 +1,6 @@
 /// @description json_test_destroy()
 function json_test_destroy() {
-
+    ///Feather disable GM2023
 	var fixture = JsonStruct(JsonMap(
 	    "foo", "FOO",
 	    "bar", JsonList("a", "b", "c"),

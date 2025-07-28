@@ -1,5 +1,6 @@
 ///@func json_test_load_save_encrypted()
 function json_test_load_save_encrypted() {
+    ///Feather disable GM2023
 
 	var fname = working_directory + "test.xjson";
 	var fixture = JsonStruct(JsonMap(

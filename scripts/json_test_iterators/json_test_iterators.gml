@@ -1,5 +1,6 @@
 /// @description json_test_iterators()
 function json_test_iterators() {
+    ///Feather disable GM2023
 
 	// 12.1: Non-existent top layer
 	var fixture = JsonStruct(JsonMap());
@@ -9,7 +10,7 @@ function json_test_iterators() {
 	json_destroy(fixture);
 
 	// 12.2: Top level is map
-	var fixture = JsonStruct(JsonMap(
+	fixture = JsonStruct(JsonMap(
 	    "foo", "FOO",
 	    "bar", JsonList("a", "b", "c"),
 	    "baz", JsonMap("d", "e")

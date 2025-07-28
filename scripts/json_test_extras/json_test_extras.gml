@@ -1,5 +1,6 @@
 /// @description json_test_extras()
 function json_test_extras() {
+    ///Feather disable GM2023
 	var expected, got, row, subentries;
 
 	// 2.1: JSON map

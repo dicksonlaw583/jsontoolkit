@@ -1,5 +1,6 @@
 /// @description json_test_extra_encodes()
 function json_test_extra_encodes() {
+    ///Feather disable GM2023
 
 	var fixture = JsonStruct(JsonList(
 	    "a", "b", JsonList("c"), JsonMap("d", "e")

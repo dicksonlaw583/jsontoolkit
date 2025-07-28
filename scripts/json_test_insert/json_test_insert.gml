@@ -1,5 +1,6 @@
 /// @description json_test_insert()
 function json_test_insert() {
+    ///Feather disable GM2023
 
 	// 7.1: Non-existent top layer
 	assert_equal(json_insert(-1, "a", "A"), 0, "7.1.1: Failed nonsense test!");

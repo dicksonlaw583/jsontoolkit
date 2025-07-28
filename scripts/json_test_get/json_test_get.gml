@@ -1,5 +1,6 @@
 /// @description json_test_get()
 function json_test_get() {
+    ///Feather disable GM2023
 
 	// 3.1: Non-existent top layer
 	assert_isnt_defined(json_get(-1), "3.1.1: Didn't detect missing top layer!");

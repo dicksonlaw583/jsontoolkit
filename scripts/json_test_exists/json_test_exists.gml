@@ -1,5 +1,6 @@
 /// @description json_test_exists()
 function json_test_exists() {
+    ///Feather disable GM2023
 
 	// 4.1: Non-existent top layer
 	assert_equal(json_exists(-1), 0, "4.1.1a: Didn't detect missing top layer!");

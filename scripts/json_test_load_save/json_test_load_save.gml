@@ -1,5 +1,6 @@
 /// @description json_test_load_save()
 function json_test_load_save() {
+    ///Feather disable GM2023
 
 	var fname = working_directory + "test.json";
 	var fixture = JsonStruct(JsonMap(
@@ -25,6 +26,7 @@ function json_test_load_save() {
 	json_destroy(got);
 
 	// Cleanup
+    ///Feather disable GM1041 once
 	file_delete(fname);
 	json_destroy(fixture);
 
