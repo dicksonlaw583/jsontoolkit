@@ -658,7 +658,11 @@ if (is_real(k)) {
 
 #define _json_not_ds
 gml_pragma("forceinline");
-return !(is_real(argument0) && ds_exists(argument0, argument1));
+try {
+    return !ds_exists(argument0, argument1);
+} catch (_) {
+    return true;
+}
 
 #define _json_dig
 /// @description _json_dig(jsonstruct, @seekpath, ignore_last_n)
